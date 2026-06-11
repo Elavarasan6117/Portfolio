@@ -1,204 +1,719 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Elavarasan T — WordPress Developer & SEO Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FAF9F6;
+  --ink:#1A1A18;
+  --ink-soft:#6B6B67;
+  --ink-hint:#B0AFA8;
+  --accent:#2C5F8A;
+  --accent-2:#1D7A55;
+  --accent-light:#EBF2F9;
+  --rule:rgba(26,26,24,0.10);
+  --radius:12px;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;overflow-x:hidden}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 5vw;
+  background:rgba(250,249,246,0.9);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid transparent;
+  transition:border-color 0.3s;
+}
+nav.scrolled{border-color:var(--rule)}
+.nav-logo{font-family:sans-serif,serif;font-size:1.15rem;color:var(--ink);text-decoration:none;letter-spacing:0.01em}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{font-size:0.875rem;color:var(--ink-soft);text-decoration:none;letter-spacing:0.02em;transition:color 0.25s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform 0.3s var(--ease);transform-origin:left}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{padding:0.5rem 1.25rem;border-radius:60px;background:var(--ink);color:var(--cream);font-size:0.82rem;font-weight:500;text-decoration:none;transition:background 0.25s,transform 0.25s}
+.nav-cta:hover{background:var(--accent);transform:translateY(-1px)}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.burger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:all 0.35s var(--ease)}
+.burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mobile-menu{
+  display:none;position:fixed;inset:0;background:var(--cream);z-index:99;
+  flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;
+}
+.mobile-menu.open{display:flex;animation:fadeUp 0.35s ease}
+.mobile-menu a{font-family:sans-serif,serif;font-size:2.2rem;color:var(--ink);text-decoration:none;transition:color 0.25s}
+.mobile-menu a:hover{color:var(--accent)}
+
+/* HERO */
+#hero{min-height:100svh;display:flex;align-items:center;padding:9rem 5vw 5rem;position:relative;overflow:hidden}
+.hero-bg-text{
+  position:absolute;right:-2vw;top:50%;transform:translateY(-50%);
+  font-family:sans-serif,serif;font-size:clamp(8rem,18vw,18rem);
+  color:rgba(44,95,138,0.04);line-height:1;user-select:none;pointer-events:none;
+  white-space:nowrap;
+}
+.hero-inner{max-width:820px;position:relative;z-index:1}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  padding:0.4rem 1rem 0.4rem 0.5rem;
+  border-radius:60px;border:1px solid var(--rule);
+  background:#fff;font-size:0.78rem;color:var(--ink-soft);
+  margin-bottom:2rem;
+  opacity:0;transform:translateY(14px);
+  animation:reveal 0.7s 0.1s var(--ease) forwards;
+}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-2);animation:pulse 2s infinite}
+.hero-greeting{
+  font-size:1.1rem;color:var(--ink-soft);font-weight:300;margin-bottom:0.5rem;
+  opacity:0;transform:translateY(16px);
+  animation:reveal 0.7s 0.25s var(--ease) forwards;
+}
+.hero-name{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(3rem,7vw,5rem);
+  line-height:1.0;letter-spacing:-0.025em;
+  opacity:0;transform:translateY(24px);
+  animation:reveal 0.9s 0.4s var(--ease) forwards;
+}
+.hero-name .accent{color:var(--accent)}
+.hero-roles{
+  display:flex;flex-wrap:wrap;gap:0.6rem;margin:1.5rem 0 1.75rem;
+  opacity:0;transform:translateY(16px);
+  animation:reveal 0.8s 0.6s var(--ease) forwards;
+}
+.role-pill{
+  padding:0.35rem 0.9rem;border-radius:60px;
+  border:1px solid var(--rule);
+  font-size:0.8rem;color:var(--ink-soft);background:#fff;
+}
+.hero-desc{
+  font-size:1.05rem;font-weight:300;color:var(--ink-soft);
+  max-width:540px;line-height:1.8;
+  opacity:0;transform:translateY(16px);
+  animation:reveal 0.8s 0.75s var(--ease) forwards;
+}
+.hero-cta{
+  display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.5rem;
+  opacity:0;
+  animation:reveal 0.8s 0.9s var(--ease) forwards;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.8rem 1.8rem;border-radius:60px;
+  font-size:0.9rem;font-weight:500;letter-spacing:0.01em;
+  text-decoration:none;transition:all 0.3s;cursor:pointer;border:none;
+  font-family: sans-serif;
+}
+.btn-primary{background:var(--ink);color:var(--cream)}
+.btn-primary:hover{background:var(--accent);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid rgba(26,26,24,0.2)}
+.btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+
+/* STATS */
+.hero-stats{
+  display:flex;gap:3rem;margin-top:3.5rem;padding-top:2.5rem;
+  border-top:1px solid var(--rule);
+  opacity:0;animation:reveal 0.8s 1.05s var(--ease) forwards;
+}
+.stat-num{font-family: sans-serif,serif;font-size:2.2rem;color:var(--ink);line-height:1}
+.stat-label{font-size:0.8rem;color:var(--ink-hint);margin-top:0.25rem;letter-spacing:0.04em}
+
+/* SECTIONS */
+section{padding:5rem 5vw}
+.section-label{
+  font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--ink-hint);font-weight:500;margin-bottom:3rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.section-label::after{content:'';flex:0 0 36px;height:1px;background:var(--ink-hint)}
+.section-title{
+  font-family: sans-serif,serif;
+  font-size:clamp(2rem,4.5vw,3.2rem);
+  line-height:1.1;letter-spacing:-0.02em;max-width:560px;
+}
+.section-sub{font-size:1rem;color:var(--ink-soft);font-weight:300;margin-top:1rem;max-width:500px;line-height:1.75}
+
+/* ABOUT */
+#about{border-top:1px solid var(--rule)}
+.about-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:start;margin-top:3.5rem}
+.about-card{
+  background:#fff;border-radius:var(--radius);
+  border:1px solid var(--rule);padding:2.5rem;
+  position:relative;overflow:hidden;
+}
+.about-card::before{
+  content:'ET';position:absolute;bottom:-1rem;right:-0.5rem;
+  font-family: sans-serif ,serif;font-size:7rem;
+  color:rgba(44,95,138,0.05);line-height:1;user-select:none;
+}
+.avatar{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--accent-light);
+  display:flex;align-items:center;justify-content:center;
+  font-family: sans-serif,serif;font-size:1.6rem;color:var(--accent);
+  margin-bottom:1.5rem;letter-spacing:0.02em;
+}
+.about-card h3{font-family: sans-serif,serif;font-size:1.4rem;margin-bottom:0.4rem}
+.about-card .role-text{font-size:0.85rem;color:var(--accent);font-weight:500;margin-bottom:1.5rem}
+.about-meta{display:flex;flex-direction:column;gap:0.75rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--rule)}
+.meta-row{display:flex;align-items:center;gap:0.75rem;font-size:0.85rem}
+.meta-icon{color:var(--accent);font-size:1rem;width:18px;text-align:center}
+.meta-label{color:var(--ink-hint);width:60px;flex-shrink:0}
+.meta-val{color:var(--ink-soft)}
+.about-text p{font-size:1rem;color:var(--ink-soft);font-weight:300;margin-bottom:1.25rem;line-height:1.8}
+.about-text p strong{font-weight:500;color:var(--ink)}
+.resume-btn{
+  display:inline-flex;align-items:center;gap:0.5rem;margin-top:1.5rem;
+  padding:0.7rem 1.5rem;border-radius:60px;
+  border:1px solid var(--rule);background:#fff;
+  font-size:0.875rem;color:var(--ink);text-decoration:none;
+  transition:all 0.25s;font-weight:500;
+}
+.resume-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+
+/* EXPERIENCE STEPS */
+#experience{border-top:1px solid var(--rule)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin-top:3rem;border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:var(--rule)}
+.step{
+  background:var(--cream);padding:2rem 1.75rem;
+  transition:background 0.3s;
+  position:relative;
+}
+.step:hover{background:#fff}
+.step-num{
+  font-family:'DM Serif Display',serif;font-size:2.5rem;
+  color:rgba(44,95,138,0.12);line-height:1;margin-bottom:1rem;
+}
+.step-title{font-family: sans-serif,serif;font-size:1.1rem;margin-bottom:0.5rem}
+.step-desc{font-size:0.85rem;color:var(--ink-soft);line-height:1.7}
+
+/* PROJECTS */
+#projects{border-top:1px solid var(--rule)}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px, 3fr));gap:1.25rem;margin-top:3rem}
+.project-card{
+  background:#fff;border-radius:var(--radius);
+  border:1px solid var(--rule);overflow:hidden;
+  transition:transform 0.45s var(--ease),box-shadow 0.45s;
+  display:flex;flex-direction:column;
+}
+.project-card:hover{transform:translateY(-6px);box-shadow:0 28px 64px rgba(26,26,24,0.09)}
+.project-card.featured{grid-column:span 2}
+.project-thumb{
+  aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;position:relative;overflow:hidden;
+}
+.project-thumb.t1{background:linear-gradient(135deg,#EBF2F9 0%,#D6E8F5 100%)}
+.project-thumb.t2{background:linear-gradient(135deg,#E8F5EB 0%,#D0EBD6 100%)}
+.project-thumb.t3{background:linear-gradient(135deg,#F5EBF2 0%,#EBD6E8 100%)}
+.project-thumb.t4{background:linear-gradient(135deg,#F5F2EB 0%,#EBE5D0 100%)}
+.project-thumb.t5{background:linear-gradient(135deg,#EBF5F2 0%,#D0EBE5 100%)}
+.project-body{padding:1.5rem;flex:1}
+.project-tag{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-hint);font-weight:500;margin-bottom:0.5rem}
+.project-title{font-family: sans-serif,serif;font-size:1.25rem;color:var(--ink);margin-bottom:0.6rem;line-height:1.2}
+.project-desc{font-size:0.875rem;color:var(--ink-soft);line-height:1.7}
+.project-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem}
+.ptag{padding:0.25rem 0.7rem;border-radius:60px;border:1px solid var(--rule);font-size:0.72rem;color:var(--ink-soft)}
+.project-footer{
+  padding:1rem 1.5rem;border-top:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.plink{font-size:0.82rem;color:var(--accent);font-weight:500;text-decoration:none;display:flex;align-items:center;gap:0.3rem;transition:gap 0.25s}
+.plink:hover{gap:0.6rem}
+
+/* SKILLS */
+#skills{border-top:1px solid var(--rule)}
+.skills-categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-top:3rem}
+.skill-cat{background:#fff;border-radius:var(--radius);border:1px solid var(--rule);padding:1.75rem}
+.skill-cat-title{font-family: sans-serif ,serif;font-size:.7rem;margin-bottom:1rem;color:var(--ink)}
+.skill-pills{display:flex;flex-wrap:wrap;gap:0.4rem}
+.spill{
+  padding:0.3rem 0.75rem;border-radius:60px;
+  border:1px solid var(--rule);font-size:0.78rem;color:var(--ink-soft);
+  transition:all 0.25s;
+}
+.spill:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+
+/* WHAT I DO */
+#services{border-top:1px solid var(--rule)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;margin-top:3rem}
+.service-card{
+  background:#fff;border-radius:var(--radius);border:1px solid var(--rule);
+  padding:2rem 1.75rem;transition:transform 0.35s var(--ease),box-shadow 0.35s;
+}
+.service-card:hover{transform:translateY(-4px);box-shadow:0 18px 48px rgba(26,26,24,0.07)}
+.service-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:var(--accent-light);display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;margin-bottom:1.25rem;
+}
+.service-name{font-family: sans-serif,serif;font-size:1.15rem;margin-bottom:0.6rem}
+.service-desc{font-size:0.875rem;color:var(--ink-soft);line-height:1.7}
+
+/* CONTACT */
+#contact{border-top:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.contact-info p{font-size:1rem;color:var(--ink-soft);font-weight:300;margin-top:1rem;line-height:1.8}
+.contact-details{display:flex;flex-direction:column;gap:1rem;margin-top:2.5rem}
+.cdetail{
+  display:flex;align-items:center;gap:1rem;
+  padding:1rem 1.25rem;border-radius:var(--radius);
+  border:1px solid var(--rule);background:#fff;
+  transition:border-color 0.25s,transform 0.25s;
+  text-decoration:none;color:var(--ink);
+}
+.cdetail:hover{border-color:var(--accent);transform:translateX(4px)}
+.cdetail-icon{
+  width:38px;height:38px;border-radius:8px;
+  background:var(--accent-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
+}
+.cdetail-label{font-size:0.72rem;color:var(--ink-hint);letter-spacing:0.08em;text-transform:uppercase}
+.cdetail-val{font-size:0.9rem;color:var(--ink);font-weight:400}
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:0.4rem}
+.form-group label{font-size:0.78rem;color:var(--ink-soft);letter-spacing:0.06em;font-weight:500;text-transform:uppercase}
+.form-group input,.form-group textarea{
+  background:#fff;border:1px solid var(--rule);border-radius:8px;
+  padding:0.8rem 1rem;font-family: sans-serif ,sans-serif;
+  font-size:0.95rem;color:var(--ink);outline:none;
+  transition:border-color 0.25s;resize:none;
+}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--accent)}
+.form-group textarea{min-height:130px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--rule);padding:2rem 5vw;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:0.8rem;color:var(--ink-hint);
+}
+footer a{color:var(--ink-hint);text-decoration:none;transition:color 0.25s}
+footer a:hover{color:var(--ink)}
+.footer-brand{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--ink)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.75s var(--ease)}
+.reveal.visible{opacity:1;transform:none}
+.rd1{transition-delay:0.1s}.rd2{transition-delay:0.2s}.rd3{transition-delay:0.3s}.rd4{transition-delay:0.4s}
+
+/* KEYFRAMES */
+@keyframes reveal{to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* REDUCED MOTION */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+
+/* MOBILE */
+@media(max-width:900px){
+  .about-grid{grid-template-columns:1fr;gap:2.5rem}
+  #contact{grid-template-columns:1fr;gap:3rem}
+  .project-card.featured{grid-column:span 1}
+  .form-row{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .burger{display:flex}
+  .hero-stats{gap:2rem;flex-wrap:wrap}
+  .projects-grid{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:0.75rem;text-align:center}
+}
+</style>
 </head>
 <body>
-    
 
-        <header>
-          
-            <h1>Portfolio</h1>
-       
-        
-                <nav>
-                    
-                    <a href="#home">Home</a>
-                    <a href="#about">About Me</a>
-                    <a href="#project">Projects</a>
-                    <a href="#contact">Contact</a>
-                
-                </nav>
-           
-        </header>
-        <section class="container1">
-        <div class="innermain">
-            <div class="innercont1">
-                <div>
-                    <h1>Hi, I'm Elavarasan</h1>
-                    <p>I’m a WordPress Web Developer and SEO Junior Analyst who builds responsive, user-friendly websites. I work with WordPress, HTML, and CSS to create clean designs with strong performance and search engine optimization.</p>
-                </div><br>
-                <a href="mailto:telavarasan131@gmail.com" class="but">Say Hello..!</a></br>
-                
-                <br> <div class="sub">
-           <div class="suv">
-                <h3>1.5 Years</h3>
-                <p>Experence</p>
-            </div>
-            <div class="suv">
-                <h3>15+</h3>
-                <p>Project</p>
-            </div>
-            <div class="suv">
-                <h3>SEO</h3>
-                <p>Junior Analyst</p>
-            </div>
-            <div class="suv">
-                <h3>Frontend</h3>
-                <p>Web Developer</p>
-            </div>
-            </div>
-            </div>
-            
-        </div>
-    </section>
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">ET<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:telavarasn131@gmail.com" class="nav-cta">Say Hello</a>
+  <button class="burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-    <section class="scondsec">
-
-        <div class="second">
-            <div>
-                <img src="WhatsApp Image 2025-12-17 at 6.11.56 PM.jpeg">
-            </div>
-            <div class="text">
-                <h2>About Me</h2>
-                <p>I am a dedicated Web Developer with hands-on experience in WordPress website development and search engine optimization. I have worked on multiple live projects involving website design, performance optimization, hosting, and maintenance.
-<br><br>
-In addition to web development, I have academic exposure to AI and machine learning concepts through real-world projects. I am passionate about learning new technologies and continuously improving my skills to create modern, efficient, and impactful digital solutions.</p>
-                <button class="butt"><a href="Elavarasan  Resume.pdf" download="suggested_filename">Download Resume</a>
-</button>
-            </div>
-        </div>
-    </section>
-
-    <section class="section3">
-
-        <div class="row1">
-          <h2>Professional Experience</h2>
-        <p>Hands-on experience in developing and maintaining WordPress websites with a strong focus on responsive design and performance. Worked on real-world projects involving SEO optimization, website audits, and technical issue resolution. Delivered reliable and user-friendly web solutions tailored to business needs.</p>
-        </div>
-        
-        <div class="row2">
-        <div class="box1">
-          <h3>1. Research</h3>
-          <p>Understanding business objectives, target users, and technical requirements to create solutions that are both purposeful and effective. Laying a strong foundation through research ensures every design and development decision adds value.</p>
-        </div>
-        <div class="box1">
-          <h3>2. Analyze</h3>
-          <p>Evaluating user flow, content structure, performance metrics, and SEO factors to identify opportunities for improvement. Translating insights into clear technical and design strategies.</p>
-        </div>
-        </div>
-        <div class="row2">
-        <div class="box1">
-          <h3>3. Design</h3>
-          <p>Designing clean, intuitive, and engaging interfaces where usability and aesthetics work together. Focused on responsive layouts, accessibility, and seamless interaction across devices.</p>
-        </div>
-        <div class="box1">
-          <h3>4. Develop & Launch</h3>
-          <p>Building performance-driven websites using WordPress, JavaScript, and MySQL, followed by thorough testing, SEO checks, and deployment. Ensuring smooth launches with optimized performance, responsiveness, and long-term maintainability.
-
-</p>
-        </div>
-        </div>
-        </section>
-
-        <section class="sect4">
-            <h2>My Projects</h2>
-            <p>These projects demonstrate my practical experience in web development and AI technologies. Each one focuses on usability, performance, and real-world application.</p>
-<div class="common">
-<div class="pro">
-    <img src="Screenshot (85).png">
-    <p>Designed and developed the official website for Zeyora Global using WordPress and WooCommerce. The site features a modern, responsive design with structured content to showcase the company’s services and business offerings. Focused on performance, usability, and scalability for future eCommerce expansion.
-</p>
-    <a href="https://zeyoraglobal.in/">click here</a>
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mlink">About</a>
+  <a href="#projects" class="mlink">Projects</a>
+  <a href="#skills" class="mlink">Skills</a>
+  <a href="#services" class="mlink">Services</a>
+  <a href="#contact" class="mlink">Contact</a>
 </div>
 
-<div class="pro">
-    <img src="pngtree">
-    <p> Built a responsive industrial business website for Industrial Direct using WordPress and WooCommerce, featuring a clean UI, structured product catalog, and scalable architecture.</p>
-    <a href="https://industrialdirect.in/">click here</a>
-</div>
-
-<div class="pro">
-    <img src="Untitled-design-28.png">
-    <p>Developed a responsive WordPress website for a construction services company, showcasing projects and services with a clean, user-friendly design.</p>
-    <a href="https://ekasynergyprojects.com/bangalore-construction-company/">click here</a>
-</div>
-<div class="pro">
-    <img src="Google-Search-Console.png">
-    <p>mplemented on-page SEO best practices to improve website visibility and search engine rankings. The SEO setup focused on creating a search-friendly site structure, optimizing content, and enhancing performance for better crawlability and user experience.</p>
-    <a href="">click here</a>
-</div>
-
-
-</div>
-
-        </section>
-
-
-            <section class="section5">
-
-        <div class="row1">
-          <h2>What I do?</h2>
-        <p>I specialize in designing user experiences, crafting engaging interfaces, and building robust web applications that deliver value and usability.
-<br><br>
-My approach combines creativity and technical expertise to deliver solutions that are both visually appealing and highly functional for users.</p>
-        </div>
-        
-        <div class="row3">
-        <div class="box3">
-          <h3>User Experience (UX)</h3>
-          <p>
-
-I design intuitive and enjoyable experiences by understanding user needs, conducting research, and creating wireframes and prototypes that enhance usability.</p>
-        </div>
-        <div class="box3">
-          <h3>User Interface (UI)</h3>
-          <p>
-
-I craft visually appealing and consistent interfaces, focusing on layout, color, and typography to ensure a seamless and engaging user journey.</p>
-        </div>
-        <div class="box3">
-          <h3>Web Development</h3>
-          <p>
-
-I build responsive and high-performance web applications using modern technologies, ensuring accessibility, scalability, and maintainability.</p>
-        </div>
-        </div>
-        
-        </section>
-
-
-        <section class="section6">
-<div class="contact">
-   
-        <h2>Contact Information</h2>
-    
-
-<div class="detail">
-<div class="det">
-    <h3>MOBILE NUMBER: <a href="tel:+91 90256 82582">+91 90256 82582</a></h3>
-    
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-text">WordPress</div>
+  <div class="hero-inner">
+ 
+    <p class="hero-greeting">Hello, I'm</p>
+    <h1 class="hero-name">Ela<span class="accent">varasan</span><br />T</h1>
+    <div class="hero-roles">
+      <span class="role-pill">WordPress Developer</span>
+      <span class="role-pill">SEO Junior Analyst</span>
+      <span class="role-pill">Frontend Developer</span>
     </div>
-    <div class="det">
-    <h3>MAIL: <a href="mailto: telavarasan131@gmail.com"> telavarasan131@gmail.com</a></h3>
-    </div>
-   
-    <div class="det">
-    <h3>LOCATION: <a href="#">Salem</a></h3>
+    <p class="hero-desc">
+      I build responsive, user-friendly websites with clean design, strong performance, and search engine optimization that help businesses grow online.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View My Projects ↓</a>
+      <a href="mailto:telavarasn131@gmail.com" class="btn btn-ghost">Say Hello</a>
     </div>
     
+  </div>
+</section>
 
-</div>
-</div>
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label reveal">About me</p>
+  <div class="about-grid">
+    <div class="about-card reveal">
+      <div class="avatar">ET</div>
+      <h3>Elavarasan T</h3>
+      <p class="role-text">WordPress Developer · SEO Analyst</p>
+      <p style="font-size:0.875rem;color:var(--ink-soft);line-height:1.75">Dedicated web developer with hands-on experience in website development and search engine optimization. Based in Salem, India.</p>
+      <div class="about-meta">
+        <div class="meta-row"><span class="meta-icon">📍</span><span class="meta-label">Location</span><span class="meta-val">Salem, India</span></div>
+        <div class="meta-row"><span class="meta-icon">✉</span><span class="meta-label">Email</span><span class="meta-val" style="font-size:0.82rem">telavarasan131@gmail.com</span></div>
+        <div class="meta-row"><span class="meta-icon">📱</span><span class="meta-label">Phone</span><span class="meta-val">+91 90256 82582</span></div>
+        <div class="meta-row"><span class="meta-icon">🎓</span><span class="meta-label">Focus</span><span class="meta-val">WordPress & SEO</span></div>
+      </div>
+      <a href="Elavarasan T Resume.pdf" class="resume-btn">⬇ Download Resume</a>
+    </div>
+    <div class="about-text">
+      <h2 class="section-title reveal">A blend of WordPress, SEO, and modern web practices.</h2>
+      <div style="margin-top:2rem">
+        <p class="reveal rd1">I am a dedicated Web Developer with <strong>hands-on experience in website development and search engine optimization</strong>. I have worked on multiple live projects involving website design, performance optimization, hosting, and maintenance.</p>
+        <p class="reveal rd2">In addition to web development, I have <strong>academic exposure to AI and machine learning concepts</strong> through real-world projects. I am passionate about learning new technologies and continuously improving my skills to create modern, efficient, and impactful digital solutions.</p>
+        <p class="reveal rd3">I take a structured approach to every project — from understanding business objectives and user needs to designing, developing, and launching with full SEO readiness and performance best practices.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        </section>
+<!-- EXPERIENCE PROCESS -->
+<section id="experience">
+  <p class="section-label reveal">My approach</p>
+  <h2 class="section-title reveal">From research to launch, a structured process.</h2>
+  <div class="steps reveal rd1">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3 class="step-title">Research</h3>
+      <p class="step-desc">Understanding business objectives, target users, and technical requirements to create solutions that are purposeful and effective.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3 class="step-title">Analyze</h3>
+      <p class="step-desc">Evaluating user flow, content structure, performance metrics, and SEO factors to identify opportunities for improvement.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3 class="step-title">Design</h3>
+      <p class="step-desc">Designing clean, intuitive, and engaging interfaces focused on responsive layouts, accessibility, and usability.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3 class="step-title">Develop & Launch</h3>
+      <p class="step-desc">Building performance-driven websites using WordPress, HTML, CSS, and JavaScript — followed by SEO checks and deployment.</p>
+    </div>
+  </div>
+</section>
 
-        <footer>
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label reveal">Selected work</p>
+  <h2 class="section-title reveal">Real-world projects across WordPress & SEO.</h2>
+  <p class="section-sub reveal rd1">Live projects involving website design, development, and search engine optimization.</p>
+  <div class="projects-grid">
 
-            <p>© 2025 Elavarasan | All Rights Reserved</p>
-        </footer>
+    <div class="project-card featured reveal">
+      <div class="project-thumb t1">🌐</div>
+      <div class="project-body">
+        <p class="project-tag">WordPress · WooCommerce · Featured</p>
+        <h3 class="project-title">Zeyora Global — Official Website</h3>
+        <p class="project-desc">Designed and developed the official website for Zeyora Global using WordPress and WooCommerce with a modern, responsive layout that showcases services and business offerings effectively.</p>
+        <div class="project-tags">
+          <span class="ptag">WordPress</span>
+          <span class="ptag">WooCommerce</span>
+          <span class="ptag">Responsive Design</span>
+          <span class="ptag">Performance</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <a href="https://zeyoraglobal.in/" class="plink">View project →</a>
+        <span style="font-size:0.8rem;color:var(--ink-hint)">Live</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal rd1">
+      <div class="project-thumb t2">🏭</div>
+      <div class="project-body">
+        <p class="project-tag">WordPress · Business Website</p>
+        <h3 class="project-title">Industrial Direct</h3>
+        <p class="project-desc">Built a responsive industrial business website featuring a clean UI, structured product catalog, and scalable architecture prepared for future growth.</p>
+        <div class="project-tags">
+          <span class="ptag">WordPress</span>
+          <span class="ptag">WooCommerce</span>
+          <span class="ptag">Business</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <a href="https://industrialdirect.in/" class="plink">View project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal rd2">
+      <div class="project-thumb t3">🏗</div>
+      <div class="project-body">
+        <p class="project-tag">WordPress · Responsive UI</p>
+        <h3 class="project-title">Construction Services Website</h3>
+        <p class="project-desc">Developed a responsive WordPress website for a construction services company, highlighting projects and services with a clean, user-friendly design.</p>
+        <div class="project-tags">
+          <span class="ptag">WordPress</span>
+          <span class="ptag">Responsive UI</span>
+          <span class="ptag">Content Structure</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <a href="https://ekasynergyprojects.com/bangalore-construction-company/" class="plink">View project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-thumb t4">🛍</div>
+      <div class="project-body">
+        <p class="project-tag">HTML · Tailwind CSS · JavaScript</p>
+        <h3 class="project-title">Online Store</h3>
+        <p class="project-desc">Responsive and user-friendly e-commerce store built with modern web technologies, improving problem-solving skills and real-world development experience.</p>
+        <div class="project-tags">
+          <span class="ptag">HTML5</span>
+          <span class="ptag">Tailwind CSS</span>
+          <span class="ptag">JavaScript</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <a href="https://elavarasan6117.github.io/Online-Store//" class="plink">View project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal rd1">
+      <div class="project-thumb t5">📈</div>
+      <div class="project-body">
+        <p class="project-tag">Game </p>
+        <h3 class="project-title">Bow & Arrow Game</h3>
+        <p class="project-desc">This Game is create for just practices the HTML, CSS, Javascript. </p>
+        <div class="project-tags">
+          <span class="ptag">HTML</span>
+          <span class="ptag">CSS</span>
+          <span class="ptag">JavaScript (JS)</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <a href="https://elavarasan6117.github.io/Arrow-Gam/" class="plink">View project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal rd1">
+      <div class="project-thumb t5">📈</div>
+      <div class="project-body">
+        <p class="project-tag">SEO · On-page · Technical</p>
+        <h3 class="project-title">SEO Optimization & On-page Strategy</h3>
+        <p class="project-desc">Implemented on-page SEO best practices to improve website visibility and rankings — focusing on site structure, content optimization, and performance for better crawlability and user experience.</p>
+        <div class="project-tags">
+          <span class="ptag">On-page SEO</span>
+          <span class="ptag">Technical SEO</span>
+          <span class="ptag">Performance</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <a href="#" class="plink">View project →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label reveal">Expertise</p>
+  <h2 class="section-title reveal">Technologies and tools I work with.</h2>
+  <div class="skills-categories">
+    <div class="skill-cat reveal">
+      <h3 class="skill-cat-title">CMS & Frameworks</h3>
+      <div class="skill-pills">
+        <span class="spill">WordPress</span>
+        <span class="spill">WooCommerce</span>
+        <span class="spill">PHP</span>
+        <span class="spill">Angular</span>
+        <span class="spill">Bootstrap</span>
+        <span class="spill">Tailwind CSS</span>
+      </div>
+    </div>
+    <div class="skill-cat reveal rd1">
+      <h3 class="skill-cat-title">Frontend</h3>
+      <div class="skill-pills">
+        <span class="spill">HTML5</span>
+        <span class="spill">CSS3</span>
+        <span class="spill">JavaScript</span>
+        <span class="spill">jQuery</span>
+        <span class="spill">Responsive Design</span>
+      </div>
+    </div>
+    <div class="skill-cat reveal rd2">
+      <h3 class="skill-cat-title">SEO</h3>
+      <div class="skill-pills">
+        <span class="spill">On-page SEO</span>
+        <span class="spill">Technical SEO</span>
+        <span class="spill">Off-page SEO</span>
+        <span class="spill">Digital Marketing</span>
+      </div>
+    </div>
+    <div class="skill-cat reveal rd3">
+      <h3 class="skill-cat-title">Tools & Others</h3>
+      <div class="skill-pills">
+        <span class="spill">MySQL</span>
+        <span class="spill">GitHub</span>
+        <span class="spill">VS Code</span>
+        <span class="spill">Eclipse</span>
+        <span class="spill">Cursor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <p class="section-label reveal">What I do</p>
+  <h2 class="section-title reveal">Designing, building & optimising web solutions.</h2>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">🎨</div>
+      <h3 class="service-name">User Interface (UI)</h3>
+      <p class="service-desc">Visually consistent interfaces with thoughtful layout, color, and typography so every page feels clean, modern, and aligned with the brand.</p>
+    </div>
+    <div class="service-card reveal rd1">
+      <div class="service-icon">🧭</div>
+      <h3 class="service-name">User Experience (UX)</h3>
+      <p class="service-desc">Intuitive, enjoyable experiences by understanding user needs, mapping journeys, and creating structures that make content easy to navigate.</p>
+    </div>
+    <div class="service-card reveal rd2">
+      <div class="service-icon">⚙️</div>
+      <h3 class="service-name">Web Development</h3>
+      <p class="service-desc">Responsive, high-performance websites using WordPress, HTML, CSS, and JavaScript with accessibility, scalability, and maintainability in mind.</p>
+    </div>
+    <div class="service-card reveal rd3">
+      <div class="service-icon">📊</div>
+      <h3 class="service-name">SEO Optimization</h3>
+      <p class="service-desc">On-page, technical, and off-page SEO strategies to improve search rankings, crawlability, and organic visibility for your website.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info">
+    <p class="section-label reveal">Contact</p>
+    <h2 class="section-title reveal">Let's build something together.</h2>
+    <p class="reveal rd1">I'm open to freelance projects, collaborations, and full-time opportunities. If you have a project in mind, I'd love to hear about it.</p>
+    <div class="contact-details">
+      <a href="tel:+919025682582" class="cdetail reveal rd1">
+        <div class="cdetail-icon">📱</div>
+        <div>
+          <div class="cdetail-label">Mobile</div>
+          <div class="cdetail-val">+91 90256 82582</div>
+        </div>
+      </a>
+      <a href="mailto:telavarasan131@gmail.com" class="cdetail reveal rd2">
+        <div class="cdetail-icon">✉</div>
+        <div>
+          <div class="cdetail-label">Email</div>
+          <div class="cdetail-val">telavarasan131@gmail.com</div>
+        </div>
+      </a>
+      <div class="cdetail reveal rd3" style="cursor:default">
+        <div class="cdetail-icon">📍</div>
+        <div>
+          <div class="cdetail-label">Location</div>
+          <div class="cdetail-val">Salem, Tamil Nadu, India</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contact-form reveal rd1">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Name" />
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="Email" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Subject</label>
+      <input type="text" placeholder="Project Inquiry" />
+    </div>
+    <div class="form-group">
+      <label>Your Message</label>
+      <textarea placeholder="Tell me about your project..."></textarea>
+    </div>
+    <button class="btn btn-primary" style="align-self:flex-start" id="sendBtn">Send Message ✉</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">Elavarasan T</span>
+  <span>WordPress Developer · SEO Analyst · Salem, India</span>
+  <a href="#hero">Back to top ↑</a>
+</footer>
+
+<script>
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',scrollY>40));
+
+const burger=document.getElementById('burger');
+const menu=document.getElementById('mobileMenu');
+burger.addEventListener('click',()=>{
+  burger.classList.toggle('open');
+  menu.classList.toggle('open');
+});
+document.querySelectorAll('.mlink').forEach(l=>l.addEventListener('click',()=>{
+  menu.classList.remove('open');burger.classList.remove('open');
+}));
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+document.getElementById('sendBtn').addEventListener('click',function(){
+  this.textContent='Sent ✓';
+  this.style.background='#1D7A55';
+  this.disabled=true;
+});
+</script>
 </body>
 </html>
